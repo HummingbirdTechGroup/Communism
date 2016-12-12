@@ -10,4 +10,10 @@ interface ExtractorInterface
      * @return mixed
      */
     public function extract($property);
+
+    /**
+     * @param string   $property
+     * @param callable $callback
+     */
+    public function replace($property, callable $callback);
 }

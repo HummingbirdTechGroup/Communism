@@ -20,8 +20,26 @@ If you want to inject any object property, use the following construction:
 To($object)->inject($property, $value);
 ```
 
+If you want to replace any object property, use the following construction:
+
+```php
+// The `replace` method is avilable for both `From` and `To` 
+From($object)->replace($property, function ($value) {
+    // `$value` will contain the current value for that property
+    
+    // Whatever is returned will be the new value of the property
+    return $newValue;
+});
+```
+
 Both functions instantiate a `carlosV2\Communism\Communist` object which
 allows the extraction and injection of properties.
+
+
+## Words of wisdom
+
+This project is designed to be used for development environment only. If you find yourself
+using this project on production code, you should better reconsider your architecture.
 
 
 ## Install

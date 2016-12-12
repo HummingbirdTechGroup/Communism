@@ -54,4 +54,23 @@ class CommunistSpec extends ObjectBehavior
     {
         $this->shouldThrow('\ReflectionException')->duringInject('unknownProperty', 'c');
     }
+
+    function it_replaces_an_object_property()
+    {
+        $this->replace('property', function ($value) { return '@' . $value; });
+
+        $this->extract('property')->shouldReturn('@1');
+    }
+
+    function it_replaces_a_parent_object_property()
+    {
+        $this->replace('parentProperty', function ($value) { return '*' . $value; });
+
+        $this->extract('parentProperty')->shouldReturn('*2');
+    }
+
+    function it_throws_an_exception_if_the_object_property_does_not_exists_when_replacing()
+    {
+        $this->shouldThrow('\ReflectionException')->duringReplace('unknownProperty', function () {});
+    }
 }

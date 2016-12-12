@@ -37,6 +37,14 @@ final class Communist implements ExtractorInterface, InjectorInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function replace($property, callable $callback)
+    {
+        $this->inject($property, $callback($this->extract($property)));
+    }
+
+    /**
      * @param string $className
      * @param string $property
      *

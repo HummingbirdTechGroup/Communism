@@ -9,4 +9,10 @@ interface InjectorInterface
      * @param mixed  $value
      */
     public function inject($property, $value);
+
+    /**
+     * @param string   $property
+     * @param callable $callback
+     */
+    public function replace($property, callable $callback);
 }
