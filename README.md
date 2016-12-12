@@ -4,6 +4,7 @@ Little utility to easily extract and inject properties from objects.
 
 [![License](https://poser.pugx.org/carlosv2/communism/license)](https://packagist.org/packages/carlosv2/communism)
 [![Build Status](https://travis-ci.org/carlosV2/Communism.svg?branch=master)](https://travis-ci.org/carlosV2/Communism)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/21d88d25-be98-4e8c-86bd-8762b4ebb039/mini.png)](https://insight.sensiolabs.com/projects/21d88d25-be98-4e8c-86bd-8762b4ebb039)
 
 ## Usage
 
