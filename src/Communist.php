@@ -45,6 +45,34 @@ final class Communist implements ExtractorInterface, InjectorInterface
     }
 
     /**
+     * @param string $property
+     * @param mixed  $value
+     */
+    public function __set($property, $value)
+    {
+        $this->inject($property, $value);
+    }
+
+    /**
+     * @param string $property
+     *
+     * @return mixed
+     */
+    public function __get($property)
+    {
+        return $this->extract($property);
+    }
+
+    /**
+     * @param string $property
+     * @param array  $arguments
+     */
+    public function __call($property, $arguments)
+    {
+        $this->replace($property, $arguments[0]);
+    }
+
+    /**
      * @param string $className
      * @param string $property
      *

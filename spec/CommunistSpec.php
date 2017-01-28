@@ -26,6 +26,25 @@ class CommunistSpec extends ObjectBehavior
         $this->extract('property')->shouldReturn(1);
     }
 
+    function it_allows_to_easily_read_a_property_value()
+    {
+        $this->property->shouldBe(1);
+    }
+
+    function it_allows_to_easily_write_a_property_value()
+    {
+        $this->property = 10;
+
+        $this->property->shouldBe(10);
+    }
+
+    function it_allows_to_easily_replace_a_property_value()
+    {
+        $this->property(function ($value) { return '@' . $value; });
+
+        $this->property->shouldBe('@1');
+    }
+
     function it_extracts_a_parent_object_property()
     {
         $this->extract('parentProperty')->shouldReturn(2);

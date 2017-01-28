@@ -8,23 +8,34 @@ Little utility to easily extract and inject properties from objects.
 
 ## Usage
 
-If you want to extract any object property, use the following construction:
+If you want to extract any object property, use one of the following constructions:
 
 ```php
-$value = From($object)->extract($property);
+$value = From($object)->property;
+// or
+$value = From($object)->extract('property');
 ```
 
-If you want to inject any object property, use the following construction:
+If you want to inject any object property, use one of the following constructions:
 
 ```php
-To($object)->inject($property, $value);
+To($object)->property = $value;
+// or
+To($object)->inject('property', $value);
 ```
 
-If you want to replace any object property, use the following construction:
+If you want to replace any object property, use one of the following constructions:
 
 ```php
-// The `replace` method is avilable for both `From` and `To` 
-From($object)->replace($property, function ($value) {
+// The `replace` method is avilable for both `From` and `To`
+From($object)->property(function ($value) {
+    // `$value` will contain the current value for that property
+    
+    // Whatever is returned will be the new value of the property
+    return $newValue;
+});
+// or
+From($object)->replace('property', function ($value) {
     // `$value` will contain the current value for that property
     
     // Whatever is returned will be the new value of the property
@@ -32,7 +43,7 @@ From($object)->replace($property, function ($value) {
 });
 ```
 
-Both functions instantiate a `carlosV2\Communism\Communist` object which
+Both functions `From` and `To` instantiate a `carlosV2\Communism\Communist` object which
 allows the extraction and injection of properties.
 
 
