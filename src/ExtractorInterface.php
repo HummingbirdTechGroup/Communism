@@ -15,5 +15,5 @@ interface ExtractorInterface
      * @param string   $property
      * @param callable $callback
      */
-    public function replace($property, callable $callback);
+    public function replace($property, $callback);
 }
