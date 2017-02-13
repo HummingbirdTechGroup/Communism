@@ -8,6 +8,11 @@ use ReflectionProperty;
 final class Communist implements ExtractorInterface, InjectorInterface
 {
     /**
+     * @var ReflectionProperty[]
+     */
+    private static $properties = array();
+
+    /**
      * @var object
      */
     private $object;
@@ -25,7 +30,7 @@ final class Communist implements ExtractorInterface, InjectorInterface
      */
     public function extract($property)
     {
-        return $this->extractByClassName(get_class($this->object), $property);
+        return $this->getReflectionProperty(get_class($this->object), $property)->getValue($this->object);
     }
 
     /**
@@ -33,7 +38,7 @@ final class Communist implements ExtractorInterface, InjectorInterface
      */
     public function inject($property, $value)
     {
-        $this->injectByClassName(get_class($this->object), $property, $value);
+        $this->getReflectionProperty(get_class($this->object), $property)->setValue($this->object, $value);
     }
 
     /**
@@ -47,6 +52,8 @@ final class Communist implements ExtractorInterface, InjectorInterface
     /**
      * @param string $property
      * @param mixed  $value
+     *
+     * @throws ReflectionException
      */
     public function __set($property, $value)
     {
@@ -57,6 +64,8 @@ final class Communist implements ExtractorInterface, InjectorInterface
      * @param string $property
      *
      * @return mixed
+     *
+     * @throws ReflectionException
      */
     public function __get($property)
     {
@@ -66,6 +75,8 @@ final class Communist implements ExtractorInterface, InjectorInterface
     /**
      * @param string $property
      * @param array  $arguments
+     *
+     * @throws ReflectionException
      */
     public function __call($property, $arguments)
     {
@@ -76,44 +87,31 @@ final class Communist implements ExtractorInterface, InjectorInterface
      * @param string $className
      * @param string $property
      *
-     * @return mixed
+     * @return ReflectionProperty
      *
      * @throws ReflectionException
      */
-    private function extractByClassName($className, $property)
+    private function getReflectionProperty($className, $property)
     {
-        try {
-            $rflProperty = new ReflectionProperty($className, $property);
-            $rflProperty->setAccessible(true);
-            return $rflProperty->getValue($this->object);
-        } catch (ReflectionException $e) {
-            if (($parentClass = get_parent_class($className)) !== false) {
-                return $this->extractByClassName($parentClass, $property);
-            } else {
-                throw $e;
-            }
+        if (!isset(self::$properties[$className])) {
+            self::$properties[$className] = array();
         }
-    }
 
-    /**
-     * @param string $className
-     * @param string $property
-     * @param mixed  $value
-     *
-     * @throws ReflectionException
-     */
-    private function injectByClassName($className, $property, $value)
-    {
-        try {
-            $rflProperty = new ReflectionProperty($className, $property);
-            $rflProperty->setAccessible(true);
-            $rflProperty->setValue($this->object, $value);
-        } catch (ReflectionException $e) {
-            if (($parentClass = get_parent_class($className)) !== false) {
-                $this->injectByClassName($parentClass, $property, $value);
-            } else {
-                throw $e;
+        if (!isset(self::$properties[$className][$property])) {
+            try {
+                $rflProperty = new ReflectionProperty($className, $property);
+                $rflProperty->setAccessible(true);
+            } catch (ReflectionException $e) {
+                if (($parentClass = get_parent_class($className)) !== false) {
+                    $rflProperty = $this->getReflectionProperty($parentClass, $property);
+                } else {
+                    throw $e;
+                }
             }
+
+            self::$properties[$className][$property] = $rflProperty;
         }
+
+        return self::$properties[$className][$property];
     }
 }
