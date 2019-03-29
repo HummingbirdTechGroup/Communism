@@ -1,4 +1,4 @@
-# Communism
+# Communism (forked)
 
 Little utility to easily extract and inject properties from objects.
 
